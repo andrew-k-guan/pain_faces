@@ -6,10 +6,15 @@ from cv2 import VideoCapture, imshow, imwrite, waitKey
 from pynput import keyboard
 
 DATA_DIR = 'data'
-cam = VideoCapture(0)
-PATIENT_ID = None
+
 NUM_CAPTURES = 5
 WAIT_TIME = 0.1
+CAPTURE_DELAY = 0.5
+CAM_IDX = 0
+
+cam = VideoCapture(CAM_IDX)
+PATIENT_ID = None
+
 
 def make_dirs():
 	if not os.path.exists(DATA_DIR):
@@ -27,6 +32,7 @@ def on_press(key):
 	recognized_keys = set(['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'])
 	try:
 		if key.char in recognized_keys:
+			time.sleep(CAPTURE_DELAY)
 			for j in range(NUM_CAPTURES):
 				result, image = cam.read()
 				if result:
