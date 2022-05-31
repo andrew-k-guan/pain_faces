@@ -1,2 +1,2 @@
-python3 -m pip install pynput
-python3 -m pip install opencv-python
+python3 -m pip install --user pynput
+python3 -m pip install --user opencv-python

@@ -29,14 +29,18 @@ def get_new_patient():
 	return i
 
 def on_press(key):
-	recognized_keys = set(['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'])
+	recognized_keys = set(['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '\x1b'])
 	try:
 		if key.char in recognized_keys:
+			if key.char != '\x1b':
+				key_char = key.char
+			else:
+				key_char = 'baseline'
 			time.sleep(CAPTURE_DELAY)
 			for j in range(NUM_CAPTURES):
 				result, image = cam.read()
 				if result:
-					filename_prefix = 'pain_{}_img_'.format(key.char)
+					filename_prefix = 'pain_{}_img_'.format(key_char)
 					i = 0
 					img_dir = os.path.join(DATA_DIR, 'patient_{}'.format(PATIENT_ID))
 					while os.path.exists(os.path.join(img_dir, filename_prefix + str(i) + '.png')):
@@ -47,6 +51,9 @@ def on_press(key):
 				else:
 					print('Error with image capture. Please try again.')
 				time.sleep(WAIT_TIME)
+		elif key.char == '\x03':
+			print('enter found, exiting...')
+			return False
 		else:
 			print('unrecognized key press {}'.format(key))
 	except AttributeError as e:
